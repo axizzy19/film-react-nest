@@ -22,6 +22,7 @@ import { OrderService } from './order/order.service';
     MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),
+      renderPath: '/content/afisha/',
     }),
   ],
   controllers: [FilmsController, OrderController],

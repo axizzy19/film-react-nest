@@ -1,0 +1,171 @@
+# services:
+#   database:
+#     image: postgres:16.4
+#     environment:
+#       POSTGRES_USER: ${POSTGRES_USER}
+#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#       POSTGRES_DB: ${POSTGRES_DB}
+#       DB_USER: ${DB_USER}
+#       DB_PASSWORD: ${DB_PASSWORD}
+#       DB_NAME: ${DB_NAME}
+#     volumes:
+#       # - /data/postgres:/data/postgres
+#       - db_data:/var/lib/postgresql/data
+#       # - postgres_data:/var/lib/postgresql/data
+#       # - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+#     ports:
+#       - '5432:5432'
+#     networks:
+#       - internal
+#     restart: unless-stopped
+
+#   pgadmin:
+#     image: dpage/pgadmin4
+#     container_name: pgadmin4_container
+#     restart: always
+#     ports:
+#       - '8080:80'
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+#       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+#     volumes:
+#       - pgadmin-data:/var/lib/pgadmin
+#     networks:
+#       - internal
+
+#   frontend:
+#     image: 'ghcr.io/${OWNER}/film-react-nest/sp16_frontend:latest'
+#     build:
+#       context: frontend
+#     environment:
+#       VITE_BASE_URL: /
+#       VITE_API_URL: /api/afisha
+#       VITE_CDN_URL: /content/afisha
+#     volumes:
+#       - frontend_build:/app/dist
+#       #  - frontend_dist:/app/dist
+#     # restart: unless-stopped
+
+#   backend: 
+#     image: 'ghcr.io/${OWNER}/film-react-nest/sp16_backend:latest'
+#     build:
+#       context: backend
+#     environment:
+#       PORT: 3000
+#       DEBUG: '*'
+#       DATABASE_DRIVER: 'postgres'
+#       # DATABASE_URL: 'postgres://database:5432/${DB_NAME}'
+#       DATABASE_URL: "postgresql://localhost"
+#       DATABASE_USERNAME: ${DB_USER}
+#       DATABASE_PASSWORD: ${DB_PASSWORD}
+#     ports:
+#       - 3000:3000
+#     networks:
+#       - internal
+#     depends_on:
+#       - database
+#     restart: unless-stopped
+
+#   server:
+#     image: 'ghcr.io/${OWNER}/sp16_server:latest'
+#     build:
+#       context: nginx
+#     ports:
+#       - 8081:80
+#     volumes:
+#       - frontend_build:/var/www
+#     depends_on:
+#       - frontend
+#       - backend
+#     networks:
+#       - internal
+
+#   nginx:
+#     image: nginx:latest
+#     ports:
+#       - 80:80
+#     networks:
+#       - internal
+#     restart: always
+#     volumes:
+#       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+#       - frontend_build:/var/www
+  
+#     depends_on:
+#       - backend
+
+# volumes:
+#   db_data:
+#   pgadmin-data:
+#   frontend_build:
+
+# networks:
+#   internal:
+
+services:
+  backend:
+    image: ghcr.io/axizzy19/film-react-nest/sp16_backend:latest
+    container_name: backend
+    depends_on:
+      - postgres
+    networks:
+      - postgres_network
+    env_file:
+      - backend/.env
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/axizzy19/film-react-nest/sp16_frontend:latest
+    container_name: frontend
+    networks:
+      - postgres_network
+    volumes:
+      - frontend_dist:/app/dist
+    env_file:
+      - frontend/.env
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    networks:
+      - postgres_network
+    env_file:
+      - postgres-settings/.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    networks:
+      - postgres_network
+    env_file:
+      - pgadmin-settings/.env
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/data
+    ports:
+      - 8080:80
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    networks:
+      - postgres_network
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - frontend_dist:/var/www/frontend:ro
+
+
+networks:
+  postgres_network:
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+  frontend_dist:

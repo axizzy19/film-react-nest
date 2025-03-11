@@ -55,9 +55,9 @@ services:
       PORT: 3000
       DEBUG: '*'
       DATABASE_DRIVER: 'postgres'
-      DATABASE_URL: 'postgres://database:5432/${DB_NAME}'
-      DATABASE_USERNAME: ${DB_USER}
-      DATABASE_PASSWORD: ${DB_PASSWORD}
+      DATABASE_URL: 'postgres://database:5432/prac'
+      DATABASE_USERNAME: prac
+      DATABASE_PASSWORD: prac
     ports:
       - 3000:3000
     networks:

@@ -1,3 +1,5 @@
+-- Создание базы данных
+CREATE DATABASE prac;
 \connect prac
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

@@ -52,11 +52,10 @@ services:
       DEBUG: '*'
       DATABASE_DRIVER: 'postgres'
       DATABASE_URL: 'postgres://database:5432/${DB_NAME}'
-      DATABASE_HOST: database
+      DATABASE_HOST: 'database'
       DATABASE_PORT: 5432
       DATABASE_USERNAME: ${DB_USER}
       DATABASE_PASSWORD: ${DB_PASSWORD}
-      DATABASE_NAME: prac
       CONTENT_URL: public/content/afisha
     ports:
       - 3000:3000

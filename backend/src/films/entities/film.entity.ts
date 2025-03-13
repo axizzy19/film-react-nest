@@ -4,7 +4,8 @@ import { ScheduleEntity } from './schedule.entity';
 
 @Entity('films')
 export class FilmEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
+  @IsString()
   id: string;
 
   @Column()
@@ -16,8 +17,8 @@ export class FilmEntity {
   director: string;
 
   @Column()
-  @IsArray()
-  tags: string[];
+  @IsString()
+  tags: string;
 
   @Column()
   @IsString()

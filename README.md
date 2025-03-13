@@ -1,5 +1,9 @@
 # FILM!
 
+## Адрес приложения
+
+http://axizzy.students.nomorepartiesco.ru/
+
 ## Установка
 
 ### MongoDB

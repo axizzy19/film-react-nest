@@ -1,9 +1,9 @@
 -- Создание базы данных
--- CREATE DATABASE prac;
--- CREATE USER prac PASSWORD prac;
--- GRANT ALL PRIVILEGES ON DATABASE prac TO prac;
+CREATE DATABASE prac;
+CREATE USER prac PASSWORD prac;
+GRANT ALL PRIVILEGES ON DATABASE prac TO prac;
 
-\connect prac;
+\connect prac
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

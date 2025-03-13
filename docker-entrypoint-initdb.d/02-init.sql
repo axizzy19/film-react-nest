@@ -1,6 +1,6 @@
 -- Создание базы данных
-CREATE DATABASE "prac";
-CREATE USER "prac" PASSWORD "prac";
+CREATE DATABASE prac;
+CREATE USER prac WITH PASSWORD "prac";
 GRANT ALL PRIVILEGES ON DATABASE "prac" TO "prac";
 
 \connect prac

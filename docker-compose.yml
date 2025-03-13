@@ -1,6 +1,7 @@
 services:
   database:
     image: postgres:16.4
+    container_name: database
     command: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -38,6 +39,7 @@ services:
 
   frontend:
     image: 'ghcr.io/${OWNER}/sp18_frontend:latest'
+    container_name: frontend
     build:
       context: frontend
     environment:
@@ -49,15 +51,16 @@ services:
 
   backend:
     image: 'ghcr.io/${OWNER}/sp18_backend:latest'
+    container_name: backend
     build:
       context: backend
     environment:
       PORT: 3000
       DEBUG: '*'
       DATABASE_DRIVER: 'postgres'
-      DATABASE_URL: 'postgres://database:5432/prac'
-      DATABASE_USERNAME: prac
-      DATABASE_PASSWORD: prac
+      DATABASE_URL: 'postgres://database:5432/${DB_NAME}'
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
     ports:
       - 3000:3000
     networks:
@@ -67,6 +70,7 @@ services:
 
   server:
     image: 'ghcr.io/${OWNER}/sp18_server:latest'
+    container_name: server
     build:
       context: nginx
     ports:
